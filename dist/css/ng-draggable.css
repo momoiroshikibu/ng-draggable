@@ -1,53 +1,28 @@
-* {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
 [ng-drag] {
-  -moz-user-select: -moz-none;
-  -khtml-user-select: none;
   -webkit-user-select: none;
+  -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
 
 [ng-drag] {
-  width: 100px;
-  height: 100px;
-  background: rgba(255, 0, 0, 0.5);
-  color: white;
-  text-align: center;
-  padding-top: 40px;
-  display: inline-block;
-  margin: 0 10px;
   cursor: move;
 }
 
-[ng-drag].drag-over {
-  border: solid 1px red;
-}
+/*[ng-drag].dragging {*/
 
-[ng-drag].dragging {
-  opacity: 0.5;
-}
+/*border: 1px solid black;*/
 
-[ng-drop] {
-  background: rgba(0, 255, 0, 0.5);
-  text-align: center;
-  width: 600px;
-  height: 200px;
-  padding-top: 90px;
-  display: block;
-  margin: 20px auto;
-  position: relative;
-}
+/*}*/
 
-[ng-drop].drag-enter {
-  border: solid 5px red;
-}
+/*[ng-drag].drag-over {*/
 
-[ng-drop] div {
-  position: relative;
-  z-index: 2;
-}
+/*border: solid 1px red;*/
+
+/*}*/
+
+/*[ng-drop].drag-enter {*/
+
+/*border: solid 1px red;*/
+
+/*}*/
