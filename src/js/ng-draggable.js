@@ -1,5 +1,5 @@
 /**
- * ng-draggable.js - v0.0.3 - A lean AngularJS drag and drop directive.
+ * ng-draggable.js - v0.0.4 - A lean AngularJS drag and drop directive.
  * Based on ngDraggable (https://github.com/fatlinesofcode/ngDraggable)
  * Planned changes:
  *    - Remove jQuery dependency
@@ -26,8 +26,6 @@ angular
 
         var _data = null;
 
-        var _dragEnabled = false;
-
         var _pressTimer = null;
 
         var onDragSuccessCallback = $parse(attrs.ngDrag) || null;
@@ -45,8 +43,7 @@ angular
           // add listeners.
 
           scope.$on('$destroy', onDestroy);
-          attrs.$observe("ngDrag", onEnableChange);
-          scope.$watch(attrs.ngDragData, onDragDataChange);
+          scope.$watch(attrs.ngDrag, onDragDataChange);
           element.on(_pressEvents, onpress);
           if (!_hasTouch) {
             element.on('mousedown', function() {
@@ -61,17 +58,11 @@ angular
           _data = newVal;
           //   console.log("69","onDragDataChange","data", _data);
         };
-        var onEnableChange = function(newVal) {
-          _dragEnabled = scope.$eval(newVal);
-
-        };
         /*
          * When the element is clicked start the drag behaviour
          * On touch devices as a small delay so as not to prevent native window scrolling
          */
         var onpress = function(evt) {
-          if (!_dragEnabled)return;
-
 
           if (_hasTouch) {
             cancelPress();
@@ -92,7 +83,6 @@ angular
           $document.off(_releaseEvents, cancelPress);
         };
         var onlongpress = function(evt) {
-          if (!_dragEnabled)return;
           evt.preventDefault();
           element.centerX = (element[0].offsetWidth / 2);
           element.centerY = (element[0].offsetHeight / 2);
@@ -110,7 +100,6 @@ angular
 
         };
         var onmove = function(evt) {
-          if (!_dragEnabled)return;
           evt.preventDefault();
 
           _mx = (evt.pageX || evt.originalEvent.touches[0].pageX);
@@ -123,7 +112,6 @@ angular
 
         };
         var onrelease = function(evt) {
-          if (!_dragEnabled)return;
           evt.preventDefault();
           $rootScope.$broadcast('draggable:end', {x: _mx, y: _my, tx: _tx, ty: _ty, element: element, data: _data, callback: onDragComplete});
           element.removeClass('dragging');
