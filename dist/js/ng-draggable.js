@@ -1,5 +1,5 @@
 /**
- * ng-draggable.js - v0.0.4 - A lean AngularJS drag and drop directive.
+ * ng-draggable.js - v0.0.5 - A lean AngularJS drag and drop directive.
  * Based on ngDraggable (https://github.com/fatlinesofcode/ngDraggable)
  * Planned changes:
  *    - Remove jQuery dependency
@@ -34,7 +34,6 @@ angular
           element.attr('draggable', 'false'); // prevent native drag
           toggleListeners(true);
         };
-
 
         var toggleListeners = function(enable) {
           // remove listeners
@@ -132,7 +131,8 @@ angular
           element.css({left: '', top: '', position: '', 'z-index': ''});
         };
         var moveElement = function(x, y) {
-          element.css({left: x, top: y, position: 'fixed', 'z-index': 99999});
+          // TODO move position, z-index to CSS
+          element.css({ left: x + 'px', top: y + 'px', position: 'fixed', 'z-index': 99999 });
         };
         initialize();
       }
