@@ -2,7 +2,7 @@
   "name": "ng-draggable",
   "version": "0.0.6",
   "authors": [
-    "Ian Walter <iankwalter@me.com>"
+    "Ian Walter (http://ianvonwalter.com)"
   ],
   "description": "A lean AngularJS drag and drop directive.",
   "main": "dist/ng-draggable.min.js",

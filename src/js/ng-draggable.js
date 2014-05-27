@@ -83,6 +83,7 @@ angular
         var onlongpress = function(evt) {
           evt.preventDefault();
           element[0].style.width = element[0].offsetWidth + 'px';
+          element[0].style.height = element[0].offsetHeight + 'px';
           element.centerX = evt.offsetX;
           element.centerY = evt.offsetY;
           element.addClass('dragging');
