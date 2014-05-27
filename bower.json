@@ -28,6 +28,7 @@
     "test",
     "*.html",
     "*.conf.js",
-    "gulpfile.js"
+    "gulpfile.js",
+    "CONTRIBUTING.md"
   ]
 }
