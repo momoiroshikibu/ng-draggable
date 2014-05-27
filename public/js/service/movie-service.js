@@ -19,14 +19,18 @@ define(
             { name: 'Dogma' }
           ],
           addToWatch: function(movie) {
-            var index = this.seenList.indexOf(movie);
-            this.watchList.push(movie);
-            this.seenList.splice(index, 1);
+            if (this.watchList.indexOf(movie) === -1) {
+              var index = this.seenList.indexOf(movie);
+              this.watchList.push(movie);
+              this.seenList.splice(index, 1);
+            }
           },
           addToSeen: function(movie) {
-            var index = this.watchList.indexOf(movie);
-            this.seenList.push(movie);
-            this.watchList.splice(index, 1);
+            if (this.seenList.indexOf(movie) === -1) {
+              var index = this.watchList.indexOf(movie);
+              this.seenList.push(movie);
+              this.watchList.splice(index, 1);
+            }
           }
         };
       });
