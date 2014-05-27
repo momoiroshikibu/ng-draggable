@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col-xs-6">
+    <div class="list-group" ng-drop="movieService.addToWatch($data)">
+      <a href="#" class="list-group-item" ng-repeat="movie in movieService.watchList" ng-bind="movie.name"
+         ng-drag="true" ng-drag-data="movie"></a>
+    </div>
+  </div>
+  <div class="col-xs-6">
+    <div class="list-group" ng-drop="movieService.addToSeen($data)">
+      <a href="#" class="list-group-item" ng-repeat="movie in movieService.seenList" ng-bind="movie.name"
+         ng-drag="true" ng-drag-data="movie"></a>
+    </div>
+  </div>
+</div>

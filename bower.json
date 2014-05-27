@@ -1,0 +1,30 @@
+{
+  "name": "ng-draggable",
+  "version": "0.0.1",
+  "authors": [
+    "Ian Walter <iankwalter@me.com>"
+  ],
+  "description": "A lean AngularJS drag and drop directive.",
+  "main": "dist/ng-draggable.min.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "angularjs",
+    "ng-draggable",
+    "angular",
+    "drag",
+    "drop",
+    "reorder",
+    "directive"
+  ],
+  "license": "MIT",
+  "homepage": "http://ianwalter.github.io/ng-draggable/",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
