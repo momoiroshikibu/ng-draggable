@@ -1,5 +1,5 @@
 /**
- * ng-draggable.js - v0.0.2 - A lean AngularJS drag and drop directive.
+ * ng-draggable.js - v0.0.3 - A lean AngularJS drag and drop directive.
  * Based on ngDraggable (https://github.com/fatlinesofcode/ngDraggable)
  * Planned changes:
  *    - Remove jQuery dependency
