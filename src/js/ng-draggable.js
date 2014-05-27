@@ -1,5 +1,5 @@
 /**
- * ng-draggable.js - v0.0.1 - A lean AngularJS drag and drop directive.
+ * ng-draggable.js - v0.0.2 - A lean AngularJS drag and drop directive.
  * Based on ngDraggable (https://github.com/fatlinesofcode/ngDraggable)
  * Planned changes:
  *    - Remove jQuery dependency
@@ -154,13 +154,10 @@ angular
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
-        var _dropEnabled = false;
-
         var onDropCallback = $parse(attrs.ngDrop);// || function(){};
         var initialize = function() {
           toggleListeners(true);
         };
-
 
         var toggleListeners = function(enable) {
           // remove listeners
@@ -194,15 +191,10 @@ angular
               obj.callback(evt);
             }
 
-            // call the ngDrop element callback
-               scope.$apply(function () {
-                   onDropCallback(scope, {$data: obj.data, $event: evt});
-               });
-//            $timeout(function() {
-//              onDropCallback(scope, {$data: obj.data, $event: evt});
-//            });
-
-
+            // Call the ng-drop callback
+            scope.$apply(function() {
+              onDropCallback(scope, { $data: obj.data, $event: evt });
+            });
           }
           updateDragStyles(false, obj.element);
         };
