@@ -1,8 +1,7 @@
 /**
- * ng-draggable.js - v0.0.5 - A lean AngularJS drag and drop directive.
+ * ng-draggable.js - v0.0.6 - A lean AngularJS drag and drop directive.
  * Based on ngDraggable (https://github.com/fatlinesofcode/ngDraggable)
  * Planned changes:
- *    - Remove jQuery dependency
  *    - Remove event system
  *    - Improve code quality
  *
@@ -83,14 +82,13 @@ angular
         };
         var onlongpress = function(evt) {
           evt.preventDefault();
-          element.centerX = (element[0].offsetWidth / 2);
-          element.centerY = (element[0].offsetHeight / 2);
+          element[0].style.width = element[0].offsetWidth + 'px';
+          element.centerX = evt.offsetX;
+          element.centerY = evt.offsetY;
           element.addClass('dragging');
           _mx = (evt.pageX || evt.originalEvent.touches[0].pageX);
           _my = (evt.pageY || evt.originalEvent.touches[0].pageY);
-          //_tx=_mx-element.centerX-$window.scrollLeft();
           _tx = _mx - element.centerX - $document[0].body.scrollLeft;
-          //_ty=_my -element.centerY-$window.scrollTop();
           _ty = _my - element.centerY - $document[0].body.scrollTop;
           moveElement(_tx, _ty);
           $document.on(_moveEvents, onmove);
@@ -208,10 +206,6 @@ angular
             && x <= rect.right
             && y <= rect.bottom
             && y >= rect.top;
-
-          //var bounds = element.offset();
-          //bounds.right = bounds.left + element.outerWidth();
-          //bounds.bottom = bounds.top + element.outerHeight();
         };
 
         initialize();

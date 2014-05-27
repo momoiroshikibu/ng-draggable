@@ -10,7 +10,6 @@ production.
 
 ### TODO
 
-1. Remove jQuery dependency
 2. Remove event system (rootScope dependency)
 3. Clean up code
 4. Add tests
