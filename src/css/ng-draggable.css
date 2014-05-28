@@ -6,9 +6,10 @@
   cursor: move;
 }
 
-/*[ng-drag].dragging {*/
-  /*border: 1px solid black;*/
-/*}*/
+[ng-drag].dragging {
+  position: fixed;
+  z-index: 9999;
+}
 
 /*[ng-drag].drag-over {*/
   /*border: solid 1px red;*/

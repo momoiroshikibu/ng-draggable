@@ -1,5 +1,5 @@
 /**
- * ng-draggable.js - v0.0.7 - A lean AngularJS drag and drop directive.
+ * ng-draggable.js - v0.0.8 - A lean AngularJS drag and drop directive.
  * Based on ngDraggable (https://github.com/fatlinesofcode/ngDraggable)
  * Planned changes:
  *    - Remove event system
@@ -30,15 +30,13 @@ angular
         var onDragSuccessCallback = $parse(attrs.ngDrag) || null;
 
         var initialize = function() {
-          element.attr('draggable', 'false'); // prevent native drag
+          // Prevent native drag
+          element.attr('draggable', 'false');
           toggleListeners(true);
         };
 
         var toggleListeners = function(enable) {
-          // remove listeners
-
-          if (!enable)return;
-          // add listeners.
+          if (!enable) return;
 
           scope.$on('$destroy', onDestroy);
           scope.$watch(attrs.ngDrag, onDragDataChange);
@@ -84,18 +82,18 @@ angular
           evt.preventDefault();
           element[0].style.width = element[0].offsetWidth + 'px';
           element[0].style.height = element[0].offsetHeight + 'px';
-          element.centerX = evt.offsetX;
-          element.centerY = evt.offsetY;
+          element.centerX = evt.offsetX || evt.layerX;
+          element.centerY = evt.offsetY || evt.layerY;
           element.addClass('dragging');
           _mx = (evt.pageX || evt.originalEvent.touches[0].pageX);
           _my = (evt.pageY || evt.originalEvent.touches[0].pageY);
           _tx = _mx - element.centerX - $document[0].body.scrollLeft;
           _ty = _my - element.centerY - $document[0].body.scrollTop;
+
           moveElement(_tx, _ty);
           $document.on(_moveEvents, onmove);
           $document.on(_releaseEvents, onrelease);
           $rootScope.$broadcast('draggable:start', {x: _mx, y: _my, tx: _tx, ty: _ty, element: element, data: _data});
-
         };
         var onmove = function(evt) {
           evt.preventDefault();
@@ -135,7 +133,7 @@ angular
         };
         initialize();
       }
-    }
+    };
   }])
   .directive('ngDrop', ['$parse', '$timeout', function($parse) {
     return {
@@ -203,13 +201,13 @@ angular
           var rect = element[0].getBoundingClientRect();
           rect.right = rect.left + element[0].outerWidth;
           rect.bottom = rect.top + element[0].outerHeight;
-          return x >= rect.left
-            && x <= rect.right
-            && y <= rect.bottom
-            && y >= rect.top;
+          return x >= rect.left &&
+            x <= rect.right &&
+            y <= rect.bottom &&
+            y >= rect.top;
         };
 
         initialize();
       }
-    }
+    };
   }]);

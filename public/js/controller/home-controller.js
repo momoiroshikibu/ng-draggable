@@ -18,10 +18,6 @@ define(
         'MovieService',
         function($scope, MovieService) {
           $scope.movieService = MovieService;
-          $scope.onDropComplete = function($data, $event) {
-            console.log($data);
-            console.log($event);
-          }
         }
       ]);
   }

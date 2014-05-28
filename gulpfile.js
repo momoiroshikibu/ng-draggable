@@ -102,7 +102,7 @@ function changeNotification(event) {
 }
 
 function build() {
-  var jsWatcher = gulp.watch('src/js/**/*.js', ['js', 'karma', 'protractor']),
+  var jsWatcher = gulp.watch('src/js/**/*.js', ['js', 'lint', 'karma', 'protractor']),
       cssWatcher = gulp.watch('src/css/**/*.css', ['css']),
       testWatcher = gulp.watch('test/**/*.js', ['karma', 'protractor']);
 
