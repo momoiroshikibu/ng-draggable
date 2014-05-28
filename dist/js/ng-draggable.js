@@ -85,8 +85,12 @@ angular
           element.centerX = evt.offsetX || evt.layerX;
           element.centerY = evt.offsetY || evt.layerY;
           element.addClass('dragging');
-          _mx = (evt.pageX || evt.originalEvent.touches[0].pageX);
-          _my = (evt.pageY || evt.originalEvent.touches[0].pageY);
+
+          _mx = evt.pageX || evt.clientX + $document[0].body.scrollLeft;
+          _my = evt.pageY || evt.clientY + $document[0].body.scrollTop;
+//          _mx = (evt.pageX || evt.originalEvent.touches[0].pageX);
+//          _my = (evt.pageY || evt.originalEvent.touches[0].pageY);
+
           _tx = _mx - element.centerX - $document[0].body.scrollLeft;
           _ty = _my - element.centerY - $document[0].body.scrollTop;
 
@@ -98,14 +102,13 @@ angular
         var onmove = function(evt) {
           evt.preventDefault();
 
-          _mx = (evt.pageX || evt.originalEvent.touches[0].pageX);
-          _my = (evt.pageY || evt.originalEvent.touches[0].pageY);
+          _mx = evt.pageX || evt.clientX + $document[0].body.scrollLeft;
+          _my = evt.pageY || evt.clientY + $document[0].body.scrollTop;
           _tx = _mx - element.centerX - $document[0].body.scrollLeft;
           _ty = _my - element.centerY - $document[0].body.scrollTop;
           moveElement(_tx, _ty);
 
           $rootScope.$broadcast('draggable:move', {x: _mx, y: _my, tx: _tx, ty: _ty, element: element, data: _data});
-
         };
         var onrelease = function(evt) {
           evt.preventDefault();
@@ -114,7 +117,6 @@ angular
           reset();
           $document.off(_moveEvents, onmove);
           $document.off(_releaseEvents, onrelease);
-
         };
         var onDragComplete = function(evt) {
 
@@ -128,8 +130,7 @@ angular
           element.css({left: '', top: '', position: '', 'z-index': ''});
         };
         var moveElement = function(x, y) {
-          // TODO move position, z-index to CSS
-          element.css({ left: x + 'px', top: y + 'px', position: 'fixed', 'z-index': 99999 });
+          element.css({ left: x + 'px', top: y + 'px' });
         };
         initialize();
       }
@@ -169,7 +170,6 @@ angular
           isTouching(obj.x, obj.y, obj.element);
         };
         var onDragEnd = function(evt, obj) {
-
           if (isTouching(obj.x, obj.y, obj.element)) {
             // call the ngDraggable element callback
             if (obj.callback) {
@@ -199,8 +199,6 @@ angular
         };
         var hitTest = function(x, y) {
           var rect = element[0].getBoundingClientRect();
-          rect.right = rect.left + element[0].outerWidth;
-          rect.bottom = rect.top + element[0].outerHeight;
           return x >= rect.left &&
             x <= rect.right &&
             y <= rect.bottom &&
