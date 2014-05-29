@@ -92,39 +92,40 @@ angular
           $document.on(_releaseEvents, onRelease);
 
           $rootScope.$broadcast('draggable:start', {x: _mx, y: _my, tx: _tx, ty: _ty, element: element });
-
-          if ($scope.callback) {
-            DraggableService.data = $scope.callback();
-          }
         };
 
         var onMove = function(event) {
-          event.preventDefault();
+          if (!$scope.disabled()) {
+            event.preventDefault();
 
-          _mx = event.pageX || event.clientX + $document[0].body.scrollLeft;
-          _my = event.pageY || event.clientY + $document[0].body.scrollTop;
-          _tx = _mx - element.centerX - $document[0].body.scrollLeft;
-          _ty = _my - element.centerY - $document[0].body.scrollTop;
-          moveElement(_tx, _ty);
+            _mx = event.pageX || event.clientX + $document[0].body.scrollLeft;
+            _my = event.pageY || event.clientY + $document[0].body.scrollTop;
+            _tx = _mx - element.centerX - $document[0].body.scrollLeft;
+            _ty = _my - element.centerY - $document[0].body.scrollTop;
+            moveElement(_tx, _ty);
 
-          $rootScope.$broadcast('draggable:move', {x: _mx, y: _my, tx: _tx, ty: _ty, element: element });
+            $rootScope.$broadcast('draggable:move', {x: _mx, y: _my, tx: _tx, ty: _ty, element: element });
+          }
         };
 
         var onRelease = function(event) {
-          event.preventDefault();
+          if (!$scope.disabled()) {
+            event.preventDefault();
 
-          $rootScope.$broadcast('draggable:end', {x: _mx, y: _my, tx: _tx, ty: _ty, element: element, callback: onDragComplete});
-          element.removeClass('dragging');
+            onDragComplete();
+            $rootScope.$broadcast('draggable:end', {x: _mx, y: _my, tx: _tx, ty: _ty, element: element });
+            element.removeClass('dragging');
 
-          reset();
+            reset();
 
-          $document.off(_moveEvents, onMove);
-          $document.off(_releaseEvents, onRelease);
+            $document.off(_moveEvents, onMove);
+            $document.off(_releaseEvents, onRelease);
+          }
         };
 
         var onDragComplete = function() {
-          if ($scope.callback) {
-            $scope.callback();
+          if (!$scope.disabled() && $scope.callback) {
+            DraggableService.data = $scope.callback();
           }
         };
 
