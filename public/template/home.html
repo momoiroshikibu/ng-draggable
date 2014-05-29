@@ -1,30 +1,32 @@
 <div class="row">
   <div class="col-xs-6">
-    <div class="row">
-      <div class="col-xs-8">
-        <h4>To Watch:</h4>
-      </div>
-      <div class="col-xs-4">
-        <a class="float-right btn btn-sm btn-danger" ng-click="movieService.watchListDisabled = true">Disable</a>
-      </div>
+    <h4>To Watch:</h4>
+    <div class="actions">
+      <a class="btn btn-sm btn-danger"
+         ng-class="{ active: movieService.watchListDisabled }"
+         ng-click="movieService.watchListDisabled = !movieService.watchListDisabled">Disable Drop</a>
+      <a class="btn btn-sm btn-warning"
+         ng-class="{ active: movieService.watchDragDisabled }"
+         ng-click="movieService.watchDragDisabled = !movieService.watchDragDisabled">Disable Drag</a>
     </div>
     <div class="list-group" ng-drop="movieService.addToWatch($data)" ng-drop-disabled="movieService.watchListDisabled">
       <a class="list-group-item" ng-repeat="movie in movieService.watchList" ng-bind="movie.name"
-         ng-drag="movie"></a>
+         ng-drag="movie" ng-drag-disabled="movieService.watchDragDisabled"></a>
     </div>
   </div>
   <div class="col-xs-6">
-    <div class="row">
-      <div class="col-xs-8">
-        <h4>Have Seen:</h4>
-      </div>
-      <div class="col-xs-4">
-        <a class="float-right btn btn-sm btn-danger" ng-click="movieService.seenListDisabled = true">Disable</a>
-      </div>
+    <h4>Have Seen:</h4>
+    <div class="actions">
+      <a class="btn btn-sm btn-danger margin-right"
+         ng-class="{ active: movieService.seenListDisabled }"
+         ng-click="movieService.seenListDisabled = !movieService.seenListDisabled">Disable Drop</a>
+      <a class="btn btn-sm btn-warning"
+         ng-class="{ active: movieService.seenDragDisabled }"
+         ng-click="movieService.seenDragDisabled = !movieService.seenDragDisabled">Disable Drag</a>
     </div>
     <div class="list-group" ng-drop="movieService.addToSeen($data)" ng-drop-disabled="movieService.seenListDisabled">
       <a class="list-group-item" ng-repeat="movie in movieService.seenList" ng-bind="movie.name"
-         ng-drag="movie"></a>
+         ng-drag="movie" ng-drag-disabled="movieService.seenDragDisabled"></a>
     </div>
   </div>
 </div>

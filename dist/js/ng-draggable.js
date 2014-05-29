@@ -30,6 +30,12 @@ angular
 
         var _pressTimer = null;
 
+        $scope.$watch('disabled()', function(value) {
+          if (value) {
+            element.addClass('ng-drag-disabled');
+          }
+        });
+
         var initialize = function() {
           // Prevent native drag
           element.attr('draggable', 'false');
@@ -41,17 +47,19 @@ angular
           }
         };
 
-        var onpress = function(evt) {
-          if (_hasTouch) {
-            cancelPress();
-            _pressTimer = setTimeout(function() {
+        var onpress = function(event) {
+          if (!$scope.disabled()) {
+            if (_hasTouch) {
               cancelPress();
-              onLongPress(evt);
-            }, 100);
-            $document.on(_moveEvents, cancelPress);
-            $document.on(_releaseEvents, cancelPress);
-          } else {
-            onLongPress(evt);
+              _pressTimer = setTimeout(function() {
+                cancelPress();
+                onLongPress(event);
+              }, 100);
+              $document.on(_moveEvents, cancelPress);
+              $document.on(_releaseEvents, cancelPress);
+            } else {
+              onLongPress(event);
+            }
           }
         };
 
@@ -61,19 +69,19 @@ angular
           $document.off(_releaseEvents, cancelPress);
         };
 
-        var onLongPress = function(evt) {
-          evt.preventDefault();
+        var onLongPress = function(event) {
+          event.preventDefault();
 
           element[0].style.width = element[0].offsetWidth + 'px';
           element[0].style.height = element[0].offsetHeight + 'px';
-          element.centerX = evt.offsetX || evt.layerX;
-          element.centerY = evt.offsetY || evt.layerY;
+          element.centerX = event.offsetX || event.layerX;
+          element.centerY = event.offsetY || event.layerY;
           element.addClass('dragging');
 
-          _mx = evt.pageX || evt.clientX + $document[0].body.scrollLeft;
-          _my = evt.pageY || evt.clientY + $document[0].body.scrollTop;
-//          _mx = (evt.pageX || evt.originalEvent.touches[0].pageX);
-//          _my = (evt.pageY || evt.originalEvent.touches[0].pageY);
+          _mx = event.pageX || event.clientX + $document[0].body.scrollLeft;
+          _my = event.pageY || event.clientY + $document[0].body.scrollTop;
+//          _mx = (event.pageX || event.originalEvent.touches[0].pageX);
+//          _my = (event.pageY || event.originalEvent.touches[0].pageY);
 
           _tx = _mx - element.centerX - $document[0].body.scrollLeft;
           _ty = _my - element.centerY - $document[0].body.scrollTop;
@@ -90,11 +98,11 @@ angular
           }
         };
 
-        var onMove = function(evt) {
-          evt.preventDefault();
+        var onMove = function(event) {
+          event.preventDefault();
 
-          _mx = evt.pageX || evt.clientX + $document[0].body.scrollLeft;
-          _my = evt.pageY || evt.clientY + $document[0].body.scrollTop;
+          _mx = event.pageX || event.clientX + $document[0].body.scrollLeft;
+          _my = event.pageY || event.clientY + $document[0].body.scrollTop;
           _tx = _mx - element.centerX - $document[0].body.scrollLeft;
           _ty = _my - element.centerY - $document[0].body.scrollTop;
           moveElement(_tx, _ty);
@@ -102,8 +110,8 @@ angular
           $rootScope.$broadcast('draggable:move', {x: _mx, y: _my, tx: _tx, ty: _ty, element: element });
         };
 
-        var onRelease = function(evt) {
-          evt.preventDefault();
+        var onRelease = function(event) {
+          event.preventDefault();
 
           $rootScope.$broadcast('draggable:end', {x: _mx, y: _my, tx: _tx, ty: _ty, element: element, callback: onDragComplete});
           element.removeClass('dragging');
@@ -146,15 +154,15 @@ angular
           $scope.$on('draggable:end', onDragEnd);
         };
 
-        var onDragStart = function(evt, obj) {
+        var onDragStart = function(event, obj) {
           isTouching(obj.x, obj.y, obj.element);
         };
 
-        var onDragMove = function(evt, obj) {
+        var onDragMove = function(event, obj) {
           isTouching(obj.x, obj.y, obj.element);
         };
 
-        var onDragEnd = function(evt, obj) {
+        var onDragEnd = function(event, obj) {
           if (!$scope.disabled() && isTouching(obj.x, obj.y, obj.element)) {
             $scope.$apply(function() {
               $scope.callback({ $data: DraggableService.data });
@@ -171,11 +179,11 @@ angular
 
         var updateDragStyles = function(touching, dragElement) {
           if (touching) {
-            element.addClass('drag-enter');
-            dragElement.addClass('drag-over');
+            element.addClass('ng-drag-enter');
+            dragElement.addClass('ng-drag-over');
           } else {
-            element.removeClass('drag-enter');
-            dragElement.removeClass('drag-over');
+            element.removeClass('ng-drag-enter');
+            dragElement.removeClass('ng-drag-over');
           }
         };
 
