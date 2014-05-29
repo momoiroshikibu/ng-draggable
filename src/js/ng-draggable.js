@@ -1,5 +1,5 @@
 /**
- * ng-draggable.js - v0.1.0 - A lean AngularJS drag and drop directive.
+ * ng-draggable.js - v0.1.1 - A lean AngularJS drag and drop directive.
  * Based on ngDraggable (https://github.com/fatlinesofcode/ngDraggable)
  * Planned changes:
  *    - Remove event system
@@ -40,11 +40,6 @@ angular
           // Prevent native drag
           element.attr('draggable', 'false');
           element.on(_pressEvents, onpress);
-          if (!_hasTouch) {
-            element.on('mousedown', function() {
-              return false;
-            });
-          }
         };
 
         var onpress = function(event) {
@@ -58,7 +53,10 @@ angular
               $document.on(_moveEvents, cancelPress);
               $document.on(_releaseEvents, cancelPress);
             } else {
-              onLongPress(event);
+              // Disable right click
+              if (event.button !== 2) {
+                onLongPress(event);
+              }
             }
           }
         };
