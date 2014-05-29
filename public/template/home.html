@@ -1,12 +1,28 @@
 <div class="row">
   <div class="col-xs-6">
-    <div class="list-group" ng-drop="movieService.addToWatch($data)">
+    <div class="row">
+      <div class="col-xs-8">
+        <h4>To Watch:</h4>
+      </div>
+      <div class="col-xs-4">
+        <a class="float-right btn btn-sm btn-danger" ng-click="movieService.watchListDisabled = true">Disable</a>
+      </div>
+    </div>
+    <div class="list-group" ng-drop="movieService.addToWatch($data)" ng-drop-disabled="movieService.watchListDisabled">
       <a class="list-group-item" ng-repeat="movie in movieService.watchList" ng-bind="movie.name"
          ng-drag="movie"></a>
     </div>
   </div>
   <div class="col-xs-6">
-    <div class="list-group" ng-drop="movieService.addToSeen($data)">
+    <div class="row">
+      <div class="col-xs-8">
+        <h4>Have Seen:</h4>
+      </div>
+      <div class="col-xs-4">
+        <a class="float-right btn btn-sm btn-danger" ng-click="movieService.seenListDisabled = true">Disable</a>
+      </div>
+    </div>
+    <div class="list-group" ng-drop="movieService.addToSeen($data)" ng-drop-disabled="movieService.seenListDisabled">
       <a class="list-group-item" ng-repeat="movie in movieService.seenList" ng-bind="movie.name"
          ng-drag="movie"></a>
     </div>

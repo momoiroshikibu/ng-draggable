@@ -51,6 +51,7 @@ define(
             { name: 'Dogma' }
           ],
           addToWatch: function(movie) {
+            if (console) console.log('Adding movie to watch list', movie);
             if (this.watchList.indexOf(movie) === -1) {
               var index = this.seenList.indexOf(movie);
               this.watchList.push(movie);
@@ -58,12 +59,15 @@ define(
             }
           },
           addToSeen: function(movie) {
+            if (console) console.log('Adding movie to seen list', movie);
             if (this.seenList.indexOf(movie) === -1) {
               var index = this.watchList.indexOf(movie);
               this.seenList.push(movie);
               this.watchList.splice(index, 1);
             }
-          }
+          },
+          watchListDisabled: false,
+          seenListDisabled: false
         };
       });
   }

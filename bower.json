@@ -30,5 +30,8 @@
     "*.conf.js",
     "gulpfile.js",
     "CONTRIBUTING.md"
-  ]
+  ],
+  "dependencies": {
+    "requirejs": "~2.1.13"
+  }
 }
