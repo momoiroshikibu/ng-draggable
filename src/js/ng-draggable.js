@@ -1,9 +1,5 @@
 /**
- * ng-draggable.js - v0.1.1 - A lean AngularJS drag and drop directive.
- * Based on ngDraggable (https://github.com/fatlinesofcode/ngDraggable)
- * Planned changes:
- *    - Remove event system
- *    - Improve code quality
+ * ng-draggable.js - v0.1.2 - A lean AngularJS drag and drop directive.
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
  */
@@ -14,7 +10,7 @@ angular
   .factory('DraggableService', function() {
     return {};
   })
-  .directive('ngDrag', ['$rootScope', '$document', 'DraggableService', function($rootScope, $document, DraggableService) {
+  .directive('ngDrag', ['$document', 'DraggableService', function($document, DraggableService) {
     return {
       restrict: 'A',
       scope: {
@@ -22,13 +18,12 @@ angular
         'disabled': '&ngDragDisabled'
       },
       link: function($scope, element) {
-        var _mx, _my, _tx, _ty;
-        var _hasTouch = ('ontouchstart' in document.documentElement);
-        var _pressEvents = 'touchstart mousedown';
-        var _moveEvents = 'touchmove mousemove';
-        var _releaseEvents = 'touchend mouseup';
+        var hasTouch = ('ontouchstart' in document.documentElement);
+        var pressEvents = 'touchstart mousedown';
+        var moveEvents = 'touchmove mousemove';
+        var releaseEvents = 'touchend mouseup';
 
-        var _pressTimer = null;
+        var pressTimer = null;
 
         $scope.$watch('disabled()', function(value) {
           if (value) {
@@ -39,19 +34,19 @@ angular
         var initialize = function() {
           // Prevent native drag
           element.attr('draggable', 'false');
-          element.on(_pressEvents, onpress);
+          element.on(pressEvents, onPress);
         };
 
-        var onpress = function(event) {
+        var onPress = function(event) {
           if (!$scope.disabled()) {
-            if (_hasTouch) {
+            if (hasTouch) {
               cancelPress();
-              _pressTimer = setTimeout(function() {
+              pressTimer = setTimeout(function() {
                 cancelPress();
                 onLongPress(event);
               }, 100);
-              $document.on(_moveEvents, cancelPress);
-              $document.on(_releaseEvents, cancelPress);
+              $document.on(moveEvents, cancelPress);
+              $document.on(releaseEvents, cancelPress);
             } else {
               // Disable right click
               if (event.button !== 2) {
@@ -62,73 +57,64 @@ angular
         };
 
         var cancelPress = function() {
-          clearTimeout(_pressTimer);
-          $document.off(_moveEvents, cancelPress);
-          $document.off(_releaseEvents, cancelPress);
+          clearTimeout(pressTimer);
+          $document.off(moveEvents, cancelPress);
+          $document.off(releaseEvents, cancelPress);
         };
 
-        var onLongPress = function(event) {
-          event.preventDefault();
+        var updateService = function(e) {
+          $scope.$apply(function() {
+            DraggableService.x = e.clientX;
+            DraggableService.y = e.clientY;
+            DraggableService.elementX = e.clientX - element.centerX;
+            DraggableService.elementY = e.clientY - element.centerY;
+            DraggableService.element = element;
+          });
+        };
+
+        var onLongPress = function(e) {
+          e.preventDefault();
 
           element[0].style.width = element[0].offsetWidth + 'px';
           element[0].style.height = element[0].offsetHeight + 'px';
-          element.centerX = event.offsetX || event.layerX;
-          element.centerY = event.offsetY || event.layerY;
+          element.centerX = e.offsetX || e.layerX;
+          element.centerY = e.offsetY || e.layerY;
           element.addClass('dragging');
 
-          _mx = event.pageX || event.clientX + $document[0].body.scrollLeft;
-          _my = event.pageY || event.clientY + $document[0].body.scrollTop;
-//          _mx = (event.pageX || event.originalEvent.touches[0].pageX);
-//          _my = (event.pageY || event.originalEvent.touches[0].pageY);
+          updateService(e);
 
-          _tx = _mx - element.centerX - $document[0].body.scrollLeft;
-          _ty = _my - element.centerY - $document[0].body.scrollTop;
+          moveElement(DraggableService.elementX, DraggableService.elementY);
 
-          moveElement(_tx, _ty);
-
-          $document.on(_moveEvents, onMove);
-          $document.on(_releaseEvents, onRelease);
-
-          $rootScope.$broadcast('draggable:start', {x: _mx, y: _my, tx: _tx, ty: _ty, element: element });
+          $document.on(moveEvents, onMove);
+          $document.on(releaseEvents, onRelease);
         };
 
-        var onMove = function(event) {
+        var onMove = function(e) {
           if (!$scope.disabled()) {
-            event.preventDefault();
+            e.preventDefault();
 
-            _mx = event.pageX || event.clientX + $document[0].body.scrollLeft;
-            _my = event.pageY || event.clientY + $document[0].body.scrollTop;
-            _tx = _mx - element.centerX - $document[0].body.scrollLeft;
-            _ty = _my - element.centerY - $document[0].body.scrollTop;
-            moveElement(_tx, _ty);
+            updateService(e);
 
-            $rootScope.$broadcast('draggable:move', {x: _mx, y: _my, tx: _tx, ty: _ty, element: element });
+            moveElement(DraggableService.elementX, DraggableService.elementY);
           }
         };
 
-        var onRelease = function(event) {
+        var onRelease = function(e) {
           if (!$scope.disabled()) {
-            event.preventDefault();
+            e.preventDefault();
 
-            onDragComplete();
-            $rootScope.$broadcast('draggable:end', {x: _mx, y: _my, tx: _tx, ty: _ty, element: element });
+            if (!$scope.disabled() && $scope.callback) {
+              DraggableService.data = $scope.callback();
+            }
+
+            updateService(e);
+
             element.removeClass('dragging');
+            element.css({ left: '', top: '', position: '', 'z-index': '' });
 
-            reset();
-
-            $document.off(_moveEvents, onMove);
-            $document.off(_releaseEvents, onRelease);
+            $document.off(moveEvents, onMove);
+            $document.off(releaseEvents, onRelease);
           }
-        };
-
-        var onDragComplete = function() {
-          if (!$scope.disabled() && $scope.callback) {
-            DraggableService.data = $scope.callback();
-          }
-        };
-
-        var reset = function() {
-          element.css({left: '', top: '', position: '', 'z-index': ''});
         };
 
         var moveElement = function(x, y) {
@@ -147,28 +133,20 @@ angular
         'disabled': '&ngDropDisabled'
       },
       link: function($scope, element) {
-        var initialize = function() {
-          $scope.$on('draggable:start', onDragStart);
-          $scope.$on('draggable:move', onDragMove);
-          $scope.$on('draggable:end', onDragEnd);
-        };
-
-        var onDragStart = function(event, obj) {
-          isTouching(obj.x, obj.y, obj.element);
-        };
-
-        var onDragMove = function(event, obj) {
-          isTouching(obj.x, obj.y, obj.element);
-        };
-
-        var onDragEnd = function(event, obj) {
-          if (!$scope.disabled() && isTouching(obj.x, obj.y, obj.element)) {
-            $scope.$apply(function() {
-              $scope.callback({ $data: DraggableService.data });
-            });
+        $scope.$watch(function() { return DraggableService.x }, function(x) {
+          if (x) {
+            isTouching(DraggableService.x, DraggableService.y, DraggableService.element);
           }
-          updateDragStyles(false, obj.element);
-        };
+        });
+
+        $scope.$watch(function() { return DraggableService.data }, function(data) {
+          if (data) {
+            if (!$scope.disabled() && isTouching(DraggableService.x, DraggableService.y, DraggableService.element)) {
+              $scope.callback({ $data: data });
+            }
+            updateDragStyles(false, DraggableService.element);
+          }
+        });
 
         var isTouching = function(mouseX, mouseY, dragElement) {
           var touching = isTouchingElement(mouseX, mouseY);
@@ -193,8 +171,6 @@ angular
             y <= rect.bottom &&
             y >= rect.top;
         };
-
-        initialize();
       }
     };
   }]);

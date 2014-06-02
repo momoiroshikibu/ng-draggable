@@ -1,1 +1,1 @@
-[ng-drag]{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:move}[ng-drag].dragging{position:fixed;z-index:9999}
+[ng-drag]{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:move}[ng-drag].dragging{position:fixed;z-index:9999}[ng-drop].ng-drag-enter{border:solid 1px red}

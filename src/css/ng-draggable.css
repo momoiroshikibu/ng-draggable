@@ -11,10 +11,10 @@
   z-index: 9999;
 }
 
-/*[ng-drag].drag-over {*/
-  /*border: solid 1px red;*/
+/*[ng-drag].ng-drag-over {*/
+  /*border: solid 1px black;*/
 /*}*/
 
-/*[ng-drop].drag-enter {*/
-  /*border: solid 1px red;*/
-/*}*/
+[ng-drop].ng-drag-enter {
+  border: solid 1px red;
+}

@@ -14,14 +14,12 @@
   z-index: 9999;
 }
 
-/*[ng-drag].drag-over {*/
+/*[ng-drag].ng-drag-over {*/
 
-/*border: solid 1px red;*/
-
-/*}*/
-
-/*[ng-drop].drag-enter {*/
-
-/*border: solid 1px red;*/
+/*border: solid 1px black;*/
 
 /*}*/
+
+[ng-drop].ng-drag-enter {
+  border: solid 1px red;
+}
