@@ -1,5 +1,5 @@
 /**
- * ng-draggable.js - v0.1.2 - A lean AngularJS drag and drop directive.
+ * ng-draggable.js - v0.1.3 - A lean AngularJS drag and drop directive.
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
  */
@@ -104,7 +104,7 @@ angular
             e.preventDefault();
 
             if (!$scope.disabled() && $scope.callback) {
-              DraggableService.data = $scope.callback();
+              DraggableService.data = angular.copy($scope.callback());
             }
 
             updateService(e);
